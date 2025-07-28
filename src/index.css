@@ -1,0 +1,8 @@
+.div-info-apto {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+}
+.div-info-apto.active {
+  display: flex;
+}
