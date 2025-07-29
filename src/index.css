@@ -6,3 +6,9 @@
 .div-info-apto.active {
   display: flex;
 }
+.input-people {
+  display: flex;
+}
+.input-people.hidden {
+  display:none;
+}
