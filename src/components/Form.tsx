@@ -12,19 +12,18 @@ export default function Form () {
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fields = Object.fromEntries(new window.FormData(e.currentTarget));
-    console.log(fields)
     setForm(fields);
     setActive(true);
   }
-  console.log('Active:', active);
+  
   return (
     <>
-      <form onSubmit={ submit }>
-        <section className='formInitial'>
+      <form onSubmit={ submit } className='form'>
+        <section className='form_initial'>
           <Input type='number' name='inputBill' placeholder='240.000'> 
             Valor del recibo publico
           </Input>
-          <div className={`input-people ${checked ? 'hidden' : ''}`}>
+          <div className={`form_initial_people ${checked ? 'hidden' : ''}`}>
             <Input type='number' name='inputPeople' placeholder='8' >
               Total de inquilinos en la casa tiempo completo
             </Input>
@@ -34,7 +33,7 @@ export default function Form () {
           </Input>
           {checked && <SctDate /> }
         </section>
-        <button className='btnSum' type='submit'>Calcular</button>
+        <button className='form_btn' type='submit'>Calcular</button>
       </form>
      { active && checked ? <CalculationWithOptions fields={ form } /> : <Calculation fields={ form } />} 
     </>

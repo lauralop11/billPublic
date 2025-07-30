@@ -9,8 +9,10 @@ interface Props {
 
 export default function Input ({ name, children, type, placeholder, value, onChange }: Props) {
   return (
-    <label className='label'> { children }
+    <div className='input'>    
+      <label > { children } </label>
       <input type={ type } name={ name } placeholder={ placeholder } defaultValue={ value } onChange={onChange}/>
-    </label>
+    </div>
+    
   )
 }

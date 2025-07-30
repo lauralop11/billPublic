@@ -6,7 +6,7 @@ export default function SctInitial () {
   const { checked, handleChange } = useInputChange();
 
   return (
-    <section>
+    <section className='form_initial'>
       <Input type='number' name='inputBill' placeholder='240.000'> 
         Valor del recibo publico
       </Input>
@@ -14,7 +14,7 @@ export default function SctInitial () {
         Total de inquilinos en la casa tiempo completo
       </Input>
       <Input type='checkbox' name='inputChangePeople' onChange={handleChange}>
-      Hubo <strong>visita</strong> o alguien se fue de <strong>vacaciones</strong> en el mes?
+      Hubo <span className="text">visita</span> o alguien se fue de <span className="text">vacaciones</span> en el mes?
       </Input>
       {checked && <SctDate /> }
     </section>

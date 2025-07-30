@@ -12,20 +12,20 @@ export default function BtnApto () {
   }
 
   return (
-    <section className='btn-apto'>
+    <section className='form_change'>
       {
        Object.entries(apartments).map(([apartment, people]) => (
-        <div key={apartment}>
+        <div key={apartment} className="form_change_apto">
           <button id={apartment} type="button" onClick= {() => (
             active === apartment ? setActive(null) :
             setActive(apartment))}>
             {`Apto ${apartment} total inquilinos tiempo completo: ${people}`}
           </button>
-          <div className={`div-info-apto ${active === apartment ? 'active' : ''}`} id={`divInfo${apartment}`}>
-            <Input name={`inputFullTime${apartment}`} className="input-info-apto" type="number" placeholder={people} value={people}> 
+          <div className={`form_change_info${active === apartment ? 'active' : ''}`} id={`divInfo${apartment}`}>
+            <Input name={`inputFullTime${apartment}`} type="number" placeholder={people} value={people}> 
               Numero de inquilinos que estuvieron tiempo completo
             </Input>
-            <Input name={`inputPartTime${apartment}`} className="input-info-apto" type="number" placeholder={0} value={0}> 
+            <Input name={`inputPartTime${apartment}`} type="number" placeholder={0} value={0}> 
               Numero de inquilinos que estuvieron tiempo completo
             </Input>
             <div className='btn-apto-input-date'>
@@ -36,12 +36,12 @@ export default function BtnApto () {
                 Fecha de fin
               </Input>
             </div>
-            <div>
+            <div className="form_change_info-radio">
               <label> Vacaciones 
-                <input type="radio" className="input-info-apto" name={`inputOptions${apartment}`} value="vacation"/>
+                <input type="radio" name={`inputOptions${apartment}`} value="vacation"/>
               </label>
               <label> Visita
-                <input type="radio" className="input-info-apto" name={`inputOptions${apartment}`} value="visit"/>
+                <input type="radio" name={`inputOptions${apartment}`} value="visit"/>
               </label> 
             </div> 
           </div>

@@ -1,0 +1,102 @@
+$color-title: #A2AF9B;
+$color-text: #687363;
+$background: #7e7d7d7c;
+$background-body: #FAF9EE;
+
+@mixin flex-box ($direction, $justify){
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: $justify;
+}
+@mixin buton {
+  background-color: $color-text;
+  color: $background-body;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+}
+main {
+  @include flex-box(column, center);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  h1 {
+    color: $color-title;
+    font-size: 2em;
+    text-align: center;
+  }
+}
+.form {
+  background-color: $background-body;
+  padding: 15px;
+  border-radius: 10px;
+  @include flex-box(column, center);
+  gap: 20px;
+  .input {
+    color: $color-text;
+    @include flex-box(row, space-between);
+    label {
+      width: 100%;
+      padding: 5px;
+    }
+    input {
+      padding: 10px 5px;
+      border-radius: 5px;
+      background: none;
+      border: 1px solid $color-title;
+      width: 40%;
+    }
+  }
+  &_initial {
+    display:flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  &_btn {
+   @include buton; 
+  }
+}
+.form_change {
+  width: 90%;
+  margin: auto;
+  .input {
+    display: flex;
+    gap: 2px;
+    padding: 10px 0;
+  }
+  &_apto {
+    button {
+      margin: 5px 0;
+      @include buton; 
+    }
+  }
+  &_info {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    background-color: $background;
+    .active{
+      display: flex; 
+    }
+    &-radio {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 20px;
+      color: $color-text;
+    }
+  }
+}
+.result {
+  margin: 10px auto;
+  width: 80%;
+  h2 {
+    color: $color-title;
+    font-size: 1em;
+    text-align: center;
+  }
+  &_info {
+    color: $color-text;
+    border-bottom: 1px solid $color-title;
+  }
+}

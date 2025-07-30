@@ -3,7 +3,7 @@ import BtnApto from './BtnApto';
 
 export default function SctDate () {
   return (
-    <section className='sct-date'>
+    <section className='form_change'>
       <Input type='date' name='dateBill' placeholder='2024-10-01'>
         Fecha de inicio del periodo de facturacion
       </Input>

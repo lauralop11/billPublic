@@ -9,8 +9,9 @@ export function Calculation ( {fields}: Props) {
   const operation = parseInt(Number(newFields[0]) / Number(newFields[1]));
  
   return (
-    <div className='calculation'>
-      <h2>El valor por persona a pagar es: {operation}</h2>
+    <div className='result'>
+      <h2>Resultado</h2>
+      <p>Total a pagar por persona: ${operation}</p>
     </div>
   )
 }
@@ -31,7 +32,9 @@ export function CalculationWithOptions({fields}: Props) {
     const apto = newFields.filter(([key, value]) => (key.includes(number)) && value !== '')
 
     const objectApto = apto.reduce((acc, item)=> {
+      acc.id = number;
       if (item[0].includes('FullTime')){acc.fullTime = (Number(item[1]) * daysBill)};
+      if (item[0].includes('FullTime')){acc.TenantfullTime = Number(item[1])};
       if (item[0].includes('PartTime')) {acc.partTime = Number(item[1])};
       if (item[0].includes('Options')) {acc.options = (item[1])};
       if (item[0].includes('dateApto')) acc.dateStart = (new Date (item[1]));
@@ -52,13 +55,26 @@ export function CalculationWithOptions({fields}: Props) {
   }
   return objectApto;
   })
+
   const totalDays = aptos.reduce((acc, item) => acc + item.totalDaysApto, 0)
   const valueForDaysBill = valueBill[0][1] / totalDays;
-  const totalValueForApto = aptos.map((apto) => (
-    apto.totalValuForApto = parseInt(apto.totalDaysApto * valueForDaysBill)
-  ))
-  console.log('aptos', aptos)
-  console.log('valueBill', valueForDaysBill)
-  console.log('valuesBill', totalValueForApto)
 
+  const totalForApto = aptos.map((apto) => (
+    apto.totalValueForApto = parseInt(apto.totalDaysApto * valueForDaysBill)
+  ))
+
+  return(
+    <section className='result'>
+      <h2>Total a pagar por Apto</h2>
+      {
+        aptos.map((apto)=>(
+          <div key={apto.id} className='result_info'>
+            <p>Apto {apto.id} total a pagar <strong>{apto.totalValueForApto}</strong> </p>
+            <p>Total de inquilinos tiempo completo {apto.TenantfullTime}</p>
+            <p>Total de inquilinos en {apto.options}: {apto.partTime}</p>
+          </div>
+        ))
+      }
+    </section>
+  )
 }
