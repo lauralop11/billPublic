@@ -51,6 +51,9 @@ main {
     display:flex;
     flex-direction: column;
     gap: 20px;
+    &_people.hidden {
+      display: none;
+    }
   }
   &_btn {
    @include buton; 

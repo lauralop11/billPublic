@@ -6,12 +6,22 @@ export function Calculation ( {fields}: Props) {
   if(!fields) return null;
 
   const newFields = Object.values(fields);
-  const operation = parseInt(Number(newFields[0]) / Number(newFields[1]));
- 
+  const valueBill = newFields[0].replace('.','');
+  
+  const operation = parseInt(parseFloat(valueBill) / Number(newFields[1]));
+  const array = operation.toString().split('').reverse()
+  const resultArray = []
+  for (let i = 0; i < array.length ; i++){
+    if (i > 0 && i % 3 === 0) {
+      resultArray.push('.');
+    }
+    resultArray.push(array[i]);
+  }
+  const result = resultArray.reverse().join('');
   return (
     <div className='result'>
       <h2>Resultado</h2>
-      <p>Total a pagar por persona: ${operation}</p>
+      <p>Total a pagar por persona: ${result}</p>
     </div>
   )
 }
@@ -21,6 +31,7 @@ export function CalculationWithOptions({fields}: Props) {
   const arrayAptos = ['201', '202', '301', '302']
   const newFields = Object.entries(fields);
   const valueBill = newFields.filter(([key, value]) => key === 'inputBill')
+  const valueBillString = valueBill[0][1].replace('.','');
 
   const arraydateBill = newFields.filter(([key, value]) => key.startsWith('dateBill') && value !== '' && value !== '0')
   const dateEndBill = new Date (arraydateBill[1][1]);
@@ -57,12 +68,21 @@ export function CalculationWithOptions({fields}: Props) {
   })
 
   const totalDays = aptos.reduce((acc, item) => acc + item.totalDaysApto, 0)
-  const valueForDaysBill = valueBill[0][1] / totalDays;
+  const valueForDaysBill = parseFloat(valueBillString) / totalDays;
 
-  const totalForApto = aptos.map((apto) => (
-    apto.totalValueForApto = parseInt(apto.totalDaysApto * valueForDaysBill)
-  ))
-
+  const totalForApto = aptos.map((apto) => {
+    const total = parseInt(apto.totalDaysApto * valueForDaysBill)
+    const totalArray = total.toString().split('').reverse()
+      const resultArray = []
+      for (let i = 0; i < totalArray.length ; i++){
+        if (i > 0 && i % 3 === 0) {
+          resultArray.push('.');
+        }
+      resultArray.push(totalArray[i]);
+    }
+    apto.totalValueForApto= resultArray.reverse().join('')
+    return apto
+  })
   return(
     <section className='result'>
       <h2>Total a pagar por Apto</h2>

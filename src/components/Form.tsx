@@ -20,7 +20,7 @@ export default function Form () {
     <>
       <form onSubmit={ submit } className='form'>
         <section className='form_initial'>
-          <Input type='number' name='inputBill' placeholder='240.000'> 
+          <Input type='text' name='inputBill' placeholder='240.000'> 
             Valor del recibo publico
           </Input>
           <div className={`form_initial_people ${checked ? 'hidden' : ''}`}>
