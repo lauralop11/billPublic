@@ -22,10 +22,10 @@ export default function BtnApto () {
             {`Apto ${apartment} total inquilinos tiempo completo: ${people}`}
           </button>
           <div className={`form_change_info${active === apartment ? 'active' : ''}`} id={`divInfo${apartment}`}>
-            <Input name={`inputFullTime${apartment}`} type="number" placeholder={people} value={people}> 
+            <Input name={`inputFullTime${apartment}`} type="number" placeholder={`${people}`} value={people}> 
               Numero de inquilinos que estuvieron tiempo completo
             </Input>
-            <Input name={`inputPartTime${apartment}`} type="number" placeholder={0} value={0}> 
+            <Input name={`inputPartTime${apartment}`} type="number" placeholder='0' value={0}> 
               Numero de inquilinos que estuvieron tiempo completo
             </Input>
             <div className='btn-apto-input-date'>

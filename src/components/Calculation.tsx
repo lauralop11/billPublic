@@ -1,14 +1,25 @@
 interface Props {
-  fields: Record<string, string | number>;
+  fields: Record<string, string | number | File>;
+}
+interface AptoData {
+  id?: number;
+  fullTime?: number;
+  TenantfullTime?: number;
+  partTime?: number;
+  options?: string;
+  dateStart?: Date;
+  dateEnd?: Date;
+  totalDaysApto?: number;
+  totalValueForApto?: string;
 }
 
 export function Calculation ( {fields}: Props) {
-  if(!fields) return null;
-
-  const newFields = Object.values(fields);
-  const valueBill = newFields[0].replace('.','');
+  if(Object.keys(fields).length === 0) return null;
   
-  const operation = parseInt(parseFloat(valueBill) / Number(newFields[1]));
+  const valueBill = fields.inputBill.replace('.','');
+  const people = Number(fields.inputPeople)
+  const operation = Math.ceil(parseFloat(valueBill) / people);
+
   const array = operation.toString().split('').reverse()
   const resultArray = []
   for (let i = 0; i < array.length ; i++){
@@ -27,52 +38,64 @@ export function Calculation ( {fields}: Props) {
 }
 
 export function CalculationWithOptions({fields}: Props) {
-  if(!fields) return null;
+  if(Object.keys(fields).length === 0) return null;
   const arrayAptos = ['201', '202', '301', '302']
-  const newFields = Object.entries(fields);
-  const valueBill = newFields.filter(([key, value]) => key === 'inputBill')
-  const valueBillString = valueBill[0][1].replace('.','');
-
-  const arraydateBill = newFields.filter(([key, value]) => key.startsWith('dateBill') && value !== '' && value !== '0')
-  const dateEndBill = new Date (arraydateBill[1][1]);
-  const dateStartBill = new Date (arraydateBill[0][1]);
-  const daysBill = parseFloat((dateEndBill - dateStartBill) / (1000 * 60 * 60 * 24) + 1); //milisegundo, segundos, minutos,horas => valores por un dia
   
+  const newFields = Object.entries(fields); //convierte fields (objetos) a un array.
+  
+  const valueBill = fields.inputBill.toString().replace('.','');
+
+  let daysBill: number;
+  if (fields.dateBill && fields.dateBillEnd) {
+    const dateEndBill = new Date (fields.dateBill);
+    const dateStartBill = new Date (fields.dateBillEnd);
+     daysBill = Math.ceil((dateEndBill.getTime() - dateStartBill.getTime()) / (1000 * 60 * 60 * 24) + 1); //milisegundo, segundos, minutos,horas => valores por un dia
+  }
 
   const aptos = arrayAptos.map((number)=> {
     const apto = newFields.filter(([key, value]) => (key.includes(number)) && value !== '')
 
-    const objectApto = apto.reduce((acc, item)=> {
-      acc.id = number;
+    const objectApto = apto.reduce<AptoData>((acc, item)=> {
+      acc.id = Number(number);
       if (item[0].includes('FullTime')){acc.fullTime = (Number(item[1]) * daysBill)};
       if (item[0].includes('FullTime')){acc.TenantfullTime = Number(item[1])};
       if (item[0].includes('PartTime')) {acc.partTime = Number(item[1])};
-      if (item[0].includes('Options')) {acc.options = (item[1])};
+      if (item[0].includes('Options')) {acc.options = (item[1]) as string};
       if (item[0].includes('dateApto')) acc.dateStart = (new Date (item[1]));
-      if (item[0].includes('dateEndApto')) acc.dateEnd = (new Date (item[1]));
+      if (item[0].includes('dateEndApto')) acc.dateEnd = (new Date (item[1]) );
      return acc
-    },{} ); 
+    },{
+      id: 0,
+      fullTime: 0,
+      partTime: 0,
+      TenantfullTime: 0,
+      options: '',
+      dateStart: new Date(),
+      dateEnd: new Date(),
+    } ); 
 
-  if(objectApto.options === 'vacation'){
-    const daysAptoChange = parseFloat((objectApto.dateEnd - objectApto.dateStart) / (1000 * 60 * 60 * 24) + 1);
-    const totalDaysChange = objectApto.partTime * daysAptoChange
-    objectApto.totalDaysApto = parseFloat(daysBill - totalDaysChange) + objectApto.fullTime ;
-  } else if (objectApto.options === 'visit'){
-      const daysAptoChange = parseFloat((objectApto.dateEnd - objectApto.dateStart) / (1000 * 60 * 60 * 24) + 1);
-      const totalDaysChange = objectApto.partTime * daysAptoChange
-      objectApto.totalDaysApto = parseFloat(objectApto.fullTime + totalDaysChange);
-  } else {
-    objectApto.totalDaysApto = objectApto.fullTime;
-  }
+    if ( objectApto.dateEnd && objectApto.dateStart && objectApto.partTime){
+      const daysAptoChange = Math.ceil(objectApto.dateEnd?.getTime() - objectApto.dateStart.getTime() / (1000 * 60 * 60 * 24) + 1);
+      debugger;
+      const totalDaysChange = objectApto.partTime * daysAptoChange;
+      if (objectApto.options === 'vacation'){
+        objectApto.totalDaysApto = (daysBill - totalDaysChange) + (objectApto.fullTime ?? 0) ;
+      } 
+      if (objectApto.options === 'visit'){
+        objectApto.totalDaysApto =(objectApto.fullTime ?? 0) + totalDaysChange;
+      }
+    } else {
+      objectApto.totalDaysApto = (objectApto.fullTime ?? 0);
+    }
   return objectApto;
   })
 
-  const totalDays = aptos.reduce((acc, item) => acc + item.totalDaysApto, 0)
-  const valueForDaysBill = parseFloat(valueBillString) / totalDays;
+  const totalDays = aptos.reduce((acc, item) => acc + (item.totalDaysApto ?? 0), 0)
+  const valueForDaysBill = parseFloat(valueBill) / totalDays;
 
-  const totalForApto = aptos.map((apto) => {
-    const total = parseInt(apto.totalDaysApto * valueForDaysBill)
-    const totalArray = total.toString().split('').reverse()
+  aptos.map((apto) => {
+    const total = Math.ceil((apto.totalDaysApto ?? 0) * valueForDaysBill);
+    const totalArray = total.toString().split('').reverse();
       const resultArray = []
       for (let i = 0; i < totalArray.length ; i++){
         if (i > 0 && i % 3 === 0) {
@@ -83,6 +106,7 @@ export function CalculationWithOptions({fields}: Props) {
     apto.totalValueForApto= resultArray.reverse().join('')
     return apto
   })
+  
   return(
     <section className='result'>
       <h2>Total a pagar por Apto</h2>

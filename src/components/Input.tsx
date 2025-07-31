@@ -1,6 +1,8 @@
+import type { ReactNode } from 'react';
+
 interface Props {
   name: string;
-  children: string;
+  children: ReactNode;
   type: string;
   placeholder?: string;
   value?: number | string;
@@ -13,6 +15,5 @@ export default function Input ({ name, children, type, placeholder, value, onCha
       <label > { children } </label>
       <input type={ type } name={ name } placeholder={ placeholder } defaultValue={ value } onChange={onChange}/>
     </div>
-    
   )
 }

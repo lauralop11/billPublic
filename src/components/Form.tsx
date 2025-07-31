@@ -2,11 +2,11 @@ import { useState } from 'react';
 import SctDate from './SctDate';
 import Input from './Input';
 import { Calculation, CalculationWithOptions } from './Calculation';
-import { useInputChange, useInputOptionsChange } from '../hooks/useInputChange';
+import { useInputChange } from '../hooks/useInputChange';
 
 export default function Form () {
   const [ active, setActive ] = useState<boolean>(false);
-  const [ form, setForm ] = useState(null);
+  const [ form, setForm ] = useState<Record<string, string | number | File>>({});
   const { checked, handleChange } = useInputChange();
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
