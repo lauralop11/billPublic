@@ -47,8 +47,8 @@ export function CalculationWithOptions({fields}: Props) {
 
   let daysBill: number;
   if ( fields.dateBill && fields.dateBillEnd && typeof fields.dateBill !== 'object' &&  typeof fields.dateBillEnd !== 'object' ) {
-    const dateEndBill = new Date (fields.dateBill);
-    const dateStartBill = new Date (fields.dateBillEnd);
+    const dateEndBill = new Date (fields.dateBillEnd);
+    const dateStartBill = new Date (fields.dateBill);
      daysBill = Math.ceil((dateEndBill.getTime() - dateStartBill.getTime()) / (1000 * 60 * 60 * 24) + 1); //milisegundo, segundos, minutos,horas => valores por un dia
   }
 
@@ -75,17 +75,16 @@ export function CalculationWithOptions({fields}: Props) {
     } ); 
 
     if ( objectApto.dateEnd && objectApto.dateStart && objectApto.partTime){
-      const daysAptoChange = Math.ceil(objectApto.dateEnd?.getTime() - objectApto.dateStart.getTime() / (1000 * 60 * 60 * 24) + 1);
+      const daysAptoChange = Math.ceil((objectApto.dateEnd?.getTime() - objectApto.dateStart.getTime()) / (1000 * 60 * 60 * 24) + 1);
       debugger;
       const totalDaysChange = objectApto.partTime * daysAptoChange;
       if (objectApto.options === 'vacation'){
         objectApto.totalDaysApto = (daysBill - totalDaysChange) + (objectApto.fullTime ?? 0) ;
-      } 
-      if (objectApto.options === 'visit'){
+      } else if (objectApto.options === 'visit'){
         objectApto.totalDaysApto =(objectApto.fullTime ?? 0) + totalDaysChange;
-      }
+      } 
     } else {
-      objectApto.totalDaysApto = (objectApto.fullTime ?? 0);
+      objectApto.totalDaysApto = objectApto.fullTime;
     }
   return objectApto;
   })
