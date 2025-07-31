@@ -16,7 +16,7 @@ interface AptoData {
 export function Calculation ( {fields}: Props) {
   if(Object.keys(fields).length === 0) return null;
   
-  const valueBill = fields.inputBill.replace('.','');
+  const valueBill = fields.inputBill.toString().replace('.','');
   const people = Number(fields.inputPeople)
   const operation = Math.ceil(parseFloat(valueBill) / people);
 
@@ -46,7 +46,7 @@ export function CalculationWithOptions({fields}: Props) {
   const valueBill = fields.inputBill.toString().replace('.','');
 
   let daysBill: number;
-  if (fields.dateBill && fields.dateBillEnd) {
+  if ( fields.dateBill && fields.dateBillEnd && typeof fields.dateBill !== 'object' &&  typeof fields.dateBillEnd !== 'object' ) {
     const dateEndBill = new Date (fields.dateBill);
     const dateStartBill = new Date (fields.dateBillEnd);
      daysBill = Math.ceil((dateEndBill.getTime() - dateStartBill.getTime()) / (1000 * 60 * 60 * 24) + 1); //milisegundo, segundos, minutos,horas => valores por un dia
@@ -61,8 +61,8 @@ export function CalculationWithOptions({fields}: Props) {
       if (item[0].includes('FullTime')){acc.TenantfullTime = Number(item[1])};
       if (item[0].includes('PartTime')) {acc.partTime = Number(item[1])};
       if (item[0].includes('Options')) {acc.options = (item[1]) as string};
-      if (item[0].includes('dateApto')) acc.dateStart = (new Date (item[1]));
-      if (item[0].includes('dateEndApto')) acc.dateEnd = (new Date (item[1]) );
+      if (item[0].includes('dateApto')) acc.dateStart = (new Date (item[1] as string | number));
+      if (item[0].includes('dateEndApto')) acc.dateEnd = (new Date (item[1] as string | number) );
      return acc
     },{
       id: 0,
